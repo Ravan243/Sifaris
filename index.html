@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Seçim Səhifəsi</title>
+  <style>
+    body {
+      background: url('https://i.imgur.com/ZqZ8daT.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+    }
+
+    select, button, textarea {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      background-color: #00aaff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0088cc;
+    }
+
+    textarea {
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Birini seç</h2>
+    <select id="chosenPerson">
+      <option>Əsmər</option>
+      <option>Zəhra</option>
+      <option>Banu</option>
+      <option>Məryəm</option>
+      <option>Tərlan</option>
+      <option>Afət</option>
+      <option>Hüsniyyə</option>
+      <option>Nurcan</option>
+      <option>Bahar</option>
+      <option>Nərgiz</option>
+      <option>Tağızadə Nərmin</option>
+      <option>Nülufər</option>
+      <option>Nuray</option>
+    </select>
+    <br>
+    <button onclick="sendOrder()">Sifariş et</button>
+  </div>
+
+  <div class="container">
+    <h3>Şərh yaz</h3>
+    <textarea id="commentText" rows="4" placeholder="Buraya şərhini yaz..."></textarea><br>
+    <button onclick="sendComment()">Göndər</button>
+  </div>
+
+  <script>
+    function sendOrder() {
+      const person = document.getElementById("chosenPerson").value;
+      const token = "7594990560:AAE3vW8HwndmTA550iMfJqwWF7f4ncTuFkk";
+      const chat_id = "7279747469";
+      const message = "Yeni sifariş: " + person;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: message
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("Sifariş göndərildi!");
+        } else {
+          alert("Xəta oldu. Yenidən yoxla.");
+        }
+      });
+    }
+
+    function sendComment() {
+      const text = document.getElementById("commentText").value.trim();
+      if (!text) {
+        alert("Şərh boş ola bilməz.");
+        return;
+      }
+
+      const token = "7594990560:AAE3vW8HwndmTA550iMfJqwWF7f4ncTuFkk";
+      const chat_id = "7279747469";
+      const message = "Yeni şərh:\n" + text;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: message
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("Şərh göndərildi!");
+          document.getElementById("commentText").value = "";
+        } else {
+          alert("Xəta baş verdi. Yenidən yoxla.");
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
